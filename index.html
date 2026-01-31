@@ -43,7 +43,7 @@
             color: #ff66a3;
             font-size: 3rem;
             text-shadow: 3px 3px 0 #ffb3d9;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             animation: float 3s ease-in-out infinite;
         }
         
@@ -51,17 +51,22 @@
             color: #ff3399;
             font-size: 1.2rem;
             font-style: italic;
+            margin-bottom: 100px;
+
         }
         
         .letter-container {
             position: relative;
             width: 100%;
             perspective: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .envelope {
             position: absolute;
-            top: 0;
+            top: 10;
             left: 50%;
             transform: translateX(-50%);
             width: 300px;
@@ -114,14 +119,17 @@
             opacity: 0;
             transform-origin: center top;
             transform: scale(0.9) rotateY(10deg);
+            margin-top: -100px;
         }
         
         .letter.open {
             opacity: 1;
             transform: scale(1) rotateY(0);
+            margin-top: 200px;
         }
         
         .letter-content {
+                      
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.8s ease 0.5s;
@@ -314,9 +322,9 @@
         }
         
         @keyframes envelopeOpen {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.1) rotate(5deg); }
-            100% { transform: translateX(-50%) scale(0) rotate(10deg); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(0) rotate(10deg); }
         }
         
         @media (max-width: 768px) {
@@ -325,6 +333,23 @@
             .message { font-size: 1.1rem; }
             .btn { padding: 12px 20px; font-size: 1rem; }
             .envelope { width: 250px; height: 170px; }
+            .envelope:before, .envelope:after {
+                width: 125px;
+                height: 125px;
+            }
+            .envelope:before {
+                top: -62.5px;
+                left: 62.5px;
+            }
+            .envelope:after {
+                top: -62.5px;
+                right: 62.5px;
+            }
+            .envelope-flap {
+                width: 250px;
+                height: 125px;
+                top: -62.5px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -334,18 +359,37 @@
             .message { font-size: 1rem; }
             .actions { flex-direction: column; align-items: center; }
             .btn { width: 80%; justify-content: center; }
+            .envelope { width: 200px; height: 140px; }
+            .envelope:before, .envelope:after {
+                width: 100px;
+                height: 100px;
+            }
+            .envelope:before {
+                top: -50px;
+                left: 50px;
+            }
+            .envelope:after {
+                top: -50px;
+                right: 50px;
+            }
+            .envelope-flap {
+                width: 200px;
+                height: 100px;
+                top: -50px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-heart"></i> I'm Sorry <i class="fas fa-heart"></i></h1>
+            <h1><i class="fas fa-heart"></i> I'm Sorry Bubsiiii <i class="fas fa-heart"></i></h1>
             <p class="subtitle">Click the envelope to open the letter</p>
         </div>
         
         <div class="letter-container">
             <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
                 <!-- Envelope design created with CSS -->
             </div>
             
@@ -358,7 +402,7 @@
                         <div class="date" id="current-date">Today</div>
                     </div>
                     
-                    <div class="salutation">My Dearest Love,</div>
+                    <div class="salutation">My Dearest Love Pawara Bubsii Patiyaa,</div>
                     
                     <div class="message">
                         <p>I'm writing this letter with a heart full of regret and love. I know I've made mistakes and hurt you, and for that, I am truly sorry.</p>
@@ -382,17 +426,12 @@
                         <div class="gif">
                             <img src="https://media.giphy.com/media/l4FGu51QHfD2qO3G8/giphy.gif" alt="Sorry bear gif">
                         </div>
-                    </div>
-                    
-                    <div class="signature">
+                         <div class="signature">
                         With all my love,<br>
-                        <span id="signer-name">Your Loving Partner</span>
+                        <span>Your Loving Partner Methni baba</span>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="actions">
+
+                     <div class="actions">
             <button class="btn forgive-btn" id="forgiveBtn">
                 <i class="fas fa-heart"></i> Please Forgive Me
             </button>
@@ -412,6 +451,16 @@
         <div id="displayText">Thank you! I love you! 💕</div>
     </div>
 
+
+                    </div>
+                    
+                   
+                </div>
+            </div>
+        </div>
+        
+       
+
     <script>
         // DOM Elements
         const envelope = document.getElementById('envelope');
@@ -422,29 +471,21 @@
         const messageDisplay = document.getElementById('messageDisplay');
         const displayText = document.getElementById('displayText');
         const currentDate = document.getElementById('current-date');
-        const signerName = document.getElementById('signer-name');
         
         // Set current date
         const today = new Date();
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         currentDate.textContent = today.toLocaleDateString('en-US', options);
         
-        // Ask for recipient's name
-        const recipientName = prompt("What's your loved one's name? (Leave blank for default)");
-        if (recipientName && recipientName.trim() !== "") {
-            signerName.textContent = recipientName;
-        }
-        
         // Open the letter when envelope is clicked
         envelope.addEventListener('click', () => {
-            // Animate envelope
-            envelope.style.animation = 'envelopeOpen 0.8s forwards';
+            // Add open class to envelope to animate the flap
+            envelope.classList.add('open');
             
             // Open letter after a short delay
             setTimeout(() => {
                 letter.classList.add('open');
-                envelope.style.display = 'none';
-            }, 500);
+            }, 300);
         });
         
         // Forgive button click
